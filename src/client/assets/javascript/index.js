@@ -131,12 +131,12 @@ async function runCountdown() {
 			// TODO - use Javascript's built in setInterval method to count down once per second
 			const updateCounter = () => {
 				// TODO - if the countdown is done, clear the interval, resolve the promise, and return
-				if (timer === 0) {
+				if (timer === 1) {
 					window.clearInterval(counter)
 					resolve()
 				}
 				// run this DOM manipulation to decrement the countdown for the user
-				document.getElementById('big-numbers').innerHTML = timer--
+				document.getElementById('big-numbers').innerHTML = --timer
 			}
 			const counter = window.setInterval(updateCounter, 1000, timer)
 		})
