@@ -74,22 +74,26 @@ async function delay(ms) {
 
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
-	// render starting UI
-	renderAt('#race', renderRaceStartView())
-
 	// TODO - Get player_id and track_id from the store
 	const { track_id, player_id } = store;
+
 	// const race = TODO - invoke the API call to create the race, then save the result
 	try {
-		const res = await createRace(track_id, player_id);
-		console.log(res);
+		const race = await createRace(player_id, track_id);
+		
+		// TODO - update the store with the race id
+		store.race_id = race.ID
+		console.log(race)
+		// render starting UI
+		renderAt('#race', renderRaceStartView(race.Track))
+		
+		// The race has been created, now start the countdown
+		// TODO - call the async function runCountdown
+		await runCountdown()
+
 	} catch (error) {
 		alert(error);
 	}
-	// TODO - update the store with the race id
-
-	// The race has been created, now start the countdown
-	// TODO - call the async function runCountdown
 
 	// TODO - call the async function startRace
 
@@ -120,17 +124,21 @@ function runRace(raceID) {
 async function runCountdown() {
 	try {
 		// wait for the DOM to load
-		await delay(1000)
+		await delay(100)
 		let timer = 3
 
 		return new Promise(resolve => {
 			// TODO - use Javascript's built in setInterval method to count down once per second
-
-			// run this DOM manipulation to decrement the countdown for the user
-			document.getElementById('big-numbers').innerHTML = --timer
-
-			// TODO - if the countdown is done, clear the interval, resolve the promise, and return
-
+			const updateCounter = () => {
+				// TODO - if the countdown is done, clear the interval, resolve the promise, and return
+				if (timer === 0) {
+					window.clearInterval(counter)
+					resolve()
+				}
+				// run this DOM manipulation to decrement the countdown for the user
+				document.getElementById('big-numbers').innerHTML = timer--
+			}
+			const counter = window.setInterval(updateCounter, 1000, timer)
 		})
 	} catch(error) {
 		console.log(error);
@@ -150,6 +158,7 @@ function handleSelectPodRacer(target) {
 	target.classList.add('selected')
 
 	// TODO - save the selected racer to the store
+	store.player_id = target.id
 }
 
 function handleSelectTrack(target) {
@@ -165,6 +174,7 @@ function handleSelectTrack(target) {
 	target.classList.add('selected')
 
 	// TODO - save the selected track id to the store
+	store.track_id = target.id
 	
 }
 
