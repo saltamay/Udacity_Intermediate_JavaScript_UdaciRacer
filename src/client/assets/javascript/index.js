@@ -78,9 +78,14 @@ async function handleCreateRace() {
 	renderAt('#race', renderRaceStartView())
 
 	// TODO - Get player_id and track_id from the store
-	
+	const { track_id, player_id } = store;
 	// const race = TODO - invoke the API call to create the race, then save the result
-
+	try {
+		const res = await createRace(track_id, player_id);
+		console.log(res);
+	} catch (error) {
+		alert(error);
+	}
 	// TODO - update the store with the race id
 
 	// The race has been created, now start the countdown
@@ -179,12 +184,12 @@ function renderRacerCars(racers) {
 	}
 
 	const results = racers.map(renderRacerCard).join('')
-
-	return `
-		<ul id="racers">
-			${reuslts}
-		</ul>
-	`
+	return results;
+	// return `
+	// 	<ul id="racers">
+	// 		${results}
+	// 	</ul>
+	// `
 }
 
 function renderRacerCard(racer) {
@@ -208,12 +213,12 @@ function renderTrackCards(tracks) {
 	}
 
 	const results = tracks.map(renderTrackCard).join('')
-
-	return `
-		<ul id="tracks">
-			${results}
-		</ul>
-	`
+	return results;
+	// return `
+	// 	<ul id="tracks">
+	// 		${results}
+	// 	</ul>
+	// `
 }
 
 function renderTrackCard(track) {
@@ -321,10 +326,16 @@ function defaultFetchOpts() {
 
 function getTracks() {
 	// GET request to `${SERVER}/api/tracks`
+	return fetch(`${SERVER}/api/tracks`)
+			.then(res => res.json())
+			.catch(err => console.log("Problem with getting tracks: ", err));
 }
 
 function getRacers() {
 	// GET request to `${SERVER}/api/cars`
+	return fetch(`${SERVER}/api/cars`)
+			.then(res => res.json())
+			.catch(err => console.log("Problem with getting racers: ", err));
 }
 
 function createRace(player_id, track_id) {
@@ -339,11 +350,14 @@ function createRace(player_id, track_id) {
 		body: JSON.stringify(body)
 	})
 	.then(res => res.json())
-	.catch(err => console.log("Problem with createRace request::", err))
+	.catch(err => console.log("Problem with createRace request: ", err))
 }
 
 function getRace(id) {
 	// GET request to `${SERVER}/api/races/${id}`
+	return fetch(`${SERVER}/api/races/${id}`)
+	.then(res => res.json)
+	.catch(err => console.log(`Problem with getting the race ${id}: `, err));
 }
 
 function startRace(id) {
