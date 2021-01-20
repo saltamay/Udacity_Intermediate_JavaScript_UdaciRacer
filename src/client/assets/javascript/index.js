@@ -80,6 +80,9 @@ async function handleCreateRace() {
 
   // const race = TODO - invoke the API call to create the race, then save the result
   try {
+    if (!track_id || !player_id)
+      throw Error('Please select a track and a player.')
+
     const race = await createRace(player_id, track_id)
 
     // TODO - update the store with the race id
@@ -296,7 +299,7 @@ function resultsView(positions) {
 		</header>
 		<main>
 			${raceProgress(positions)}
-			<a href="/race">Start a new race</a>
+			<a class="button" href="/race">Start a new race</a>
 		</main>
 	`
 }
