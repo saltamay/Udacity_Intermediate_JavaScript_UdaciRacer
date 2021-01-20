@@ -83,19 +83,21 @@ async function handleCreateRace() {
 		
 		// TODO - update the store with the race id
 		store.race_id = race.ID
-		console.log(race)
-		// render starting UI
-		renderAt('#race', renderRaceStartView(race.Track))
-		
+				
 		// The race has been created, now start the countdown
 		// TODO - call the async function runCountdown
 		await runCountdown()
+		
+		// render starting UI
+		renderAt('#race', renderRaceStartView(race.Track))
 
+		// TODO - call the async function startRace
+		console.log(store.race_id)
+		const res = await startRace(store.race_id);
+		console.log(res)
 	} catch (error) {
 		alert(error);
 	}
-
-	// TODO - call the async function startRace
 
 	// TODO - call the async function runRace
 }
@@ -327,7 +329,7 @@ function defaultFetchOpts() {
 		mode: 'cors',
 		headers: {
 			'Content-Type': 'application/json',
-			'Access-Control-Allow-Origin' : SERVER,
+			'Access-Control-Allow-Origin': SERVER,
 		},
 	}
 }
@@ -376,7 +378,7 @@ function startRace(id) {
 		...defaultFetchOpts(),
 	})
 	.then(res => res.json())
-	.catch(err => console.log("Problem with getRace request::", err))
+	.catch(err => console.log("Problem with startRace request: ", err))
 }
 
 function accelerate(id) {
