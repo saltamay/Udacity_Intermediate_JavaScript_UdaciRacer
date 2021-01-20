@@ -115,7 +115,7 @@ function runRace(raceID) {
     const raceInterval = window.setInterval(async function () {
       try {
         const res = await getRace(raceID)
-        console.log(res)
+
         if (res.status === 'in-progress')
           renderAt('#leaderBoard', raceProgress(res.positions))
 
@@ -216,12 +216,8 @@ function renderRacerCars(racers) {
   }
 
   const results = racers.map(renderRacerCard).join('')
+
   return results
-  // return `
-  // 	<ul id="racers">
-  // 		${results}
-  // 	</ul>
-  // `
 }
 
 function renderRacerCard(racer) {
@@ -245,12 +241,8 @@ function renderTrackCards(tracks) {
   }
 
   const results = tracks.map(renderTrackCard).join('')
+
   return results
-  // return `
-  // 	<ul id="tracks">
-  // 		${results}
-  // 	</ul>
-  // `
 }
 
 function renderTrackCard(track) {
